@@ -14,6 +14,7 @@ public class PropertyManagementClient {
         PropertyManagement management = new PropertyManagement(propertyManagementDAO);
 
         try {
+            int id;
             switch (command) {
                 case "list":
                     if (args.length == 2) {
@@ -22,8 +23,8 @@ public class PropertyManagementClient {
                     } else if (args.length == 3) {
                         // ID provided, list the specific apartment
                         try {
-                            int id = Integer.parseInt(args[2]);
-                            Apartment apartment = management.getApartmentById(id);
+                              id = Integer.parseInt(args[2]);
+                              Apartment apartment = management.getApartmentById(id);
                             if (apartment != null) {
                                 System.out.println(apartment);
                             } else {
@@ -38,78 +39,68 @@ public class PropertyManagementClient {
                     }
                     break;
 
-                case "addOwned":
-                    if (args.length != 13) {
-                        throw new IllegalArgumentException("Error: Invalid parameter.");
+                case "add":
+                    if (args.length < 13) 
+                    {
+                      throw new IllegalArgumentException("Error: Invalid parameter.");
                     }
 
-                    try {
-                        int id = Integer.parseInt(args[2]);
-                        double area = Double.parseDouble(args[3]);
-                        int rooms = Integer.parseInt(args[4]);
-                        int floor = Integer.parseInt(args[5]);
-                        int year = Integer.parseInt(args[6]);
+                    String type = args[2];
+                    id = Integer.parseInt(args[3]);
+                    double area = Double.parseDouble(args[4]);
+                    int rooms = Integer.parseInt(args[5]);
+                    int floor = Integer.parseInt(args[6]);
+                    int year = Integer.parseInt(args[7]);
 
-                        // Check if the year is valid
-                        if (year > Year.now().getValue()) {
-                            throw new IllegalArgumentException("Error: Invalid year of construction.");
-                        }
-
-                        String postalCode = args[7];
-                        String street = args[8];
-                        String houseNumber = args[9];
-                        String apartmentNumber = args[10];
-                        double operatingCosts = Double.parseDouble(args[11]);
-                        double reserveFund = Double.parseDouble(args[12]);
-
-                        // Check if apartment already exists
-                        if (management.getApartmentById(id) != null) {
-                            throw new IllegalArgumentException("Error: Apartment already exists. (id=" + id + ")");
-                        }
-
-                        OwnedApartment ownedApartment = new OwnedApartment(id, area, rooms, floor, year, postalCode, street, houseNumber, apartmentNumber, operatingCosts, reserveFund);
-                        management.addApartment(ownedApartment);
-                        System.out.println("Info: Apartment " + id + " added.");
-                    } catch (NumberFormatException e) {
-                        System.err.println("Error: Invalid parameter.");
-                    }
-                    break;
-
-                case "addRented":
-                    if (args.length != 13) {
-                        throw new IllegalArgumentException("Error: Invalid parameter.");
+                    // Check if the year is valid
+                    if (year > Year.now().getValue()) {
+                       throw new IllegalArgumentException("Error: Invalid year of construction.");
                     }
 
-                    try {
-                        int id = Integer.parseInt(args[2]);
-                        double area = Double.parseDouble(args[3]);
-                        int rooms = Integer.parseInt(args[4]);
-                        int floor = Integer.parseInt(args[5]);
-                        int year = Integer.parseInt(args[6]);
+                    String postalCode = args[8];
+                    String street = args[9];
+                    String houseNumber = args[10];
+                    String apartmentNumber = args[11];
 
-                        // Check if the year is valid
-                        if (year > Year.now().getValue()) {
-                            throw new IllegalArgumentException("Error: Invalid year of construction.");
-                        }
+                   // Check if apartment already exists
+                   if (management.getApartmentById(id) != null) {
+                       throw new IllegalArgumentException("Error: Apartment already exists. (id=" + id + ")");
+                   }
 
-                        String postalCode = args[7];
-                        String street = args[8];
-                        String houseNumber = args[9];
-                        String apartmentNumber = args[10];
-                        double rent = Double.parseDouble(args[11]);
-                        int tenants = Integer.parseInt(args[12]);
+                   if (type.equals("OA")) {
+                      if (args.length != 14) {
+                          throw new IllegalArgumentException("Error: Invalid parameter.");
+                      }
 
-                        // Check if apartment already exists
-                        if (management.getApartmentById(id) != null) {
-                            throw new IllegalArgumentException("Error: Apartment already exists. (id=" + id + ")");
-                        }
+                      double operatingCosts = Double.parseDouble(args[12]);
+                      double reserveFund = Double.parseDouble(args[13]);
 
-                        RentedApartment rentedApartment = new RentedApartment(id, area, rooms, floor, year, postalCode, street, houseNumber, apartmentNumber, rent, tenants);
-                        management.addApartment(rentedApartment);
-                        System.out.println("Info: Apartment " + id + " added.");
-                    } catch (NumberFormatException e) {
-                        System.err.println("Error: Invalid parameter.");
-                    }
+                      OwnedApartment ownedApartment = new OwnedApartment(id, area, rooms, floor, year, postalCode, street, houseNumber, apartmentNumber, operatingCosts, reserveFund);
+                      management.addApartment(ownedApartment);
+                      System.out.println("Info: Apartment " + id + " added.");
+        
+                   } 
+                   
+                   else if (type.equals("RA")) 
+                   {
+                       if (args.length != 14) 
+                       {
+                           throw new IllegalArgumentException("Error: Invalid parameter.");
+                       }
+
+                      double rent = Double.parseDouble(args[12]);
+                      int tenants = Integer.parseInt(args[13]);
+
+                      RentedApartment rentedApartment = new RentedApartment(id, area, rooms, floor, year, postalCode, street, houseNumber, apartmentNumber, rent, tenants);
+                      management.addApartment(rentedApartment);
+                      System.out.println("Info: Apartment " + id + " added.");
+        
+                   } 
+                   
+                   else 
+                   {
+                       throw new IllegalArgumentException("Error: Invalid parameter.");
+                   }
                     break;
 
                 case "delete":
@@ -118,7 +109,7 @@ public class PropertyManagementClient {
                     }
 
                     try {
-                        int id = Integer.parseInt(args[2]);
+                        id = Integer.parseInt(args[2]);
                         Apartment apartment = management.getApartmentById(id);
                         if (apartment == null) {
                             throw new IllegalArgumentException("Error: Apartment not found. (id=" + id + ")");
@@ -135,10 +126,10 @@ public class PropertyManagementClient {
                     if (args.length == 2) {
                         System.out.println(management.getTotalApartments());
                     } else if (args.length == 3) {
-                        String type = args[2];
+                        String counttype = args[2];
                         long count = management.getAllApartments().stream()
-                            .filter(apartment -> (type.equals("OA") && apartment instanceof OwnedApartment) ||
-                                                 (type.equals("RA") && apartment instanceof RentedApartment))
+                            .filter(apartment -> (counttype.equals("OA") && apartment instanceof OwnedApartment) ||
+                                                 (counttype.equals("RA") && apartment instanceof RentedApartment))
                             .count();
                         System.out.println(count);
                     } else {
@@ -146,7 +137,7 @@ public class PropertyManagementClient {
                     }
                     break;
 
-                case "averageCost":
+                case "meancosts":
                     DecimalFormat df = Apartment.getDecimalFormat();
                     System.out.println(df.format(management.getAverageTotalCost()));
                     break;
@@ -154,7 +145,7 @@ public class PropertyManagementClient {
                 case "oldest":
                     Apartment oldest = management.getOldestApartment();
                     if (oldest != null) {
-                        System.out.println("ID: " + oldest.getId());
+                        System.out.println("Id: " + oldest.getId());
                     } else {
                         System.out.println("No apartments found.");
                     }
