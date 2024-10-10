@@ -43,15 +43,20 @@ public class PropertyManagementClient {
                 case "add":
                     try 
                     {
-                        if (args.length < 13) {
-                           throw new IllegalArgumentException("Error: Invalid parameter.");
-                        }
+                        
 
                            String type = args[2];
+                           if (type.equals("OA") && args.length != 14) {
+                                throw new IllegalArgumentException("Error: Invalid parameter.");
+                           }
+                           if (type.equals("RA") && args.length != 14) {
+                                throw new IllegalArgumentException("Error: Invalid parameter.");
+                           }
+                           
                            int id = Integer.parseInt(args[3]);
                            double area = Double.parseDouble(args[4]);
-                  		   int rooms = Integer.parseInt(args[5]);
-                  		   int floor = Integer.parseInt(args[6]);
+                  		     int rooms = Integer.parseInt(args[5]);
+                  		     int floor = Integer.parseInt(args[6]);
                            int year = Integer.parseInt(args[7]);
 
                          // Check if the year is valid
@@ -71,9 +76,7 @@ public class PropertyManagementClient {
 
                          if (type.equals("OA")) 
                          {
-                             if (args.length != 14) {
-                                  throw new IllegalArgumentException("Error: Invalid parameter.");
-                             }
+                             
 
                            double operatingCosts = Double.parseDouble(args[12]);
                            double reserveFund = Double.parseDouble(args[13]);
@@ -85,9 +88,7 @@ public class PropertyManagementClient {
                         } 
                         else if (type.equals("RA")) 
                         {
-                             if (args.length != 14) {
-                                  throw new IllegalArgumentException("Error: Invalid parameter.");
-                             }
+                             
 
                            double rent = Double.parseDouble(args[12]);
                            int tenants = Integer.parseInt(args[13]);
