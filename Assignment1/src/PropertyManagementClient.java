@@ -3,7 +3,7 @@ import java.text.DecimalFormat;
 import java.util.List;
 public class PropertyManagementClient {
     public static void main(String[] args) {
-
+        args = combineQuotedStrings(args);
         if (args.length < 2) {
             System.err.println("Error: Invalid parameter.");
             return;
@@ -173,5 +173,26 @@ public class PropertyManagementClient {
         } catch (IllegalArgumentException e) {
             System.err.println(e.getMessage());
         }
+    }
+
+    private static String[] combineQuotedStrings(String[] args) {
+        List<String> combinedArgs = new ArrayList<>();
+        StringBuilder current = null;
+
+        for (String arg : args) {
+            if (arg.startsWith("\"")) { // Start of a quoted string
+                current = new StringBuilder(arg);
+            } else if (arg.endsWith("\"") && current != null) { // End of a quoted string
+                current.append(" ").append(arg);
+                combinedArgs.add(current.toString().replaceAll("^\"|\"$", ""));  // Remove the surrounding quotes
+                current = null;
+            } else if (current != null) { // Inside a quoted string
+                current.append(" ").append(arg);
+            } else { // Regular argument
+                combinedArgs.add(arg);
+            }
+        }
+
+        return combinedArgs.toArray(new String[0]);
     }
 }
