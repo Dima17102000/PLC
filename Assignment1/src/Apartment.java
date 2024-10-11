@@ -73,7 +73,7 @@ public abstract class Apartment implements Serializable {
             "Postal Code:       %s\n" +
             "Street:            %s\n" +
             "House Number:      %s\n" +
-            "Apartment Number:  %s",
+            "Apartment:         %s",
             id, df.format(area), rooms, floor, yearOfConstruction, postalCode, street, houseNumber, apartmentNumber
         );
     }
@@ -85,3 +85,6 @@ public abstract class Apartment implements Serializable {
         return new DecimalFormat("0.00", dfs);
     }
 }
+
+
+

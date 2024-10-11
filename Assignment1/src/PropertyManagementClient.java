@@ -7,7 +7,7 @@ public class PropertyManagementClient {
    
         args = combineQuotedStrings(args);
         if (args.length < 2) {
-            System.err.println("Error: Invalid parameter.");
+            System.out.println("Error: Invalid parameter.");
             return; 
         }
 
@@ -30,9 +30,10 @@ public class PropertyManagementClient {
                               Apartment apartment = management.getApartmentById(id);
                             if (apartment != null) {
                                 System.out.println(apartment);
-                            } else {
-                                System.out.println("Error: Apartment not found. (id=" + id + ")");
+                            } /*else {
+                                //System.out.println("");//"Error: Apartment not found. (id=" + id + ")");
                             }
+                            */
                         } catch (NumberFormatException e) {
                             System.err.println("Error: Invalid parameter.");
                         }
@@ -45,14 +46,19 @@ public class PropertyManagementClient {
                 case "add":
                     try 
                     {
-                        
-
                            String type = args[2];
-                           if (type.equals("OA") && args.length != 14) {
-                                throw new IllegalArgumentException("Error: Invalid parameter.");
+                           if (!type.equals("OA") && args.length != 14) {
+                                System.out.println("Error: Invalid parameter.");
+                                return;
                            }
-                           if (type.equals("RA") && args.length != 14) {
-                                throw new IllegalArgumentException("Error: Invalid parameter.");
+                           if (!type.equals("RA") && args.length != 14) {
+                                System.out.println("Error: Invalid parameter.");
+                                return;
+                           }
+                           // Check if the id is a valid digit
+                           if (!args[3].matches("\\d+")) {
+                                System.out.println("Error: Invalid parameter.");
+                                return;  // Exit early if id is not a valid digit
                            }
                            
                            int id = Integer.parseInt(args[3]);
@@ -63,7 +69,7 @@ public class PropertyManagementClient {
 
                          // Check if the year is valid
                          if (year > Year.now().getValue()) {
-                           throw new IllegalArgumentException("Error: Invalid year of construction.");
+                           System.out.println("Error: Invalid year of construction.");
                          } 
 
                            String postalCode = args[8];
@@ -103,7 +109,7 @@ public class PropertyManagementClient {
                         
                         else 
                         {
-                                 throw new IllegalArgumentException("Error: Invalid parameter.");
+                                 System.out.println("Error: Invalid parameter.");
                         }
                     } catch (NumberFormatException e){
                             System.err.println("Error: Invalid parameter.");
@@ -113,24 +119,25 @@ public class PropertyManagementClient {
 
                 case "delete":
                     if (args.length != 3) {
-                        throw new IllegalArgumentException("Error: Invalid parameter.");
+                         throw new IllegalArgumentException("Error: Invalid parameter.");
                     }
 
                     try {
-                        
-                        // Объявляем id локально в этом блоке
-                        int id = Integer.parseInt(args[2]);
-                        Apartment apartment = management.getApartmentById(id);
-                        if (apartment == null) {
-                            throw new IllegalArgumentException("Error: Apartment not found. (id=" + id + ")");
-                        }
-
-
-                        management.deleteApartment(id);
-                        System.out.println("Info: Apartment " + id + " deleted.");
-                    } catch (NumberFormatException e) {
-                        System.err.println("Error: Invalid parameter.");
-                    }
+                          int id = Integer.parseInt(args[2]);
+                          Apartment apartment = management.getApartmentById(id);
+                          if (apartment == null) {
+                              // Print the error message if the apartment doesn't exist
+                             System.out.println("Error: Apartment not found. (id=" + id + ")");
+                          } 
+                          else 
+                          {
+                              // Only proceed with deletion if the apartment exists
+                              management.deleteApartment(id);
+                              System.out.println("Info: Apartment " + id + " deleted.");
+                          }
+                        } catch (NumberFormatException e) {
+                                 System.err.println("Error: Invalid parameter.");
+                           }
                     break;
 
                 case "count":
@@ -170,7 +177,7 @@ public class PropertyManagementClient {
                     break;
 
                 default:
-                    throw new IllegalArgumentException("Error: Invalid command.");
+                    System.out.println("Error: Invalid parameter.");
             }
         } catch (IllegalArgumentException e) {
             System.err.println(e.getMessage());
@@ -198,3 +205,4 @@ public class PropertyManagementClient {
          return combinedArgs.toArray(new String[0]);
      }
 }
+

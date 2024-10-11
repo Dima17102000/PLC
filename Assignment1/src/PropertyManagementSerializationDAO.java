@@ -11,7 +11,7 @@ public class PropertyManagementSerializationDAO implements PropertyManagementDAO
 
     @SuppressWarnings("unchecked") // Unterdrückt die Warnung
     @Override
-    public List<Apartment> getApartmentList() {
+    public List<Apartment> getApartments() {
         try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(filename))) {
             return (List<Apartment>) in.readObject();
         } catch (FileNotFoundException e) {
@@ -25,7 +25,7 @@ public class PropertyManagementSerializationDAO implements PropertyManagementDAO
 
     @Override
     public void saveApartment(Apartment apartment) {
-        List<Apartment> apartments = getApartmentList();
+        List<Apartment> apartments = getApartments();
         apartments.add(apartment);
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(filename))) {
             out.writeObject(apartments);
@@ -37,7 +37,7 @@ public class PropertyManagementSerializationDAO implements PropertyManagementDAO
 
     @Override
     public void deleteApartment(int id) {
-        List<Apartment> apartments = getApartmentList();
+        List<Apartment> apartments = getApartments();
         apartments.removeIf(apartment -> apartment.getId() == id);
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(filename))) {
             out.writeObject(apartments);
@@ -49,9 +49,10 @@ public class PropertyManagementSerializationDAO implements PropertyManagementDAO
 
     @Override
     public Apartment getApartmentById(int id) {
-        return getApartmentList().stream()
+        return getApartments().stream()
                 .filter(apartment -> apartment.getId() == id)
                 .findFirst()
                 .orElse(null);
     }
 }
+

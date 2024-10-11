@@ -9,7 +9,7 @@ public class PropertyManagement {
     }
 
     public List<Apartment> getAllApartments() {
-        return propertymanagementDAO.getApartmentList();
+        return propertymanagementDAO.getApartments();
     }
 
     public Apartment getApartmentById(int id) {
@@ -25,11 +25,11 @@ public class PropertyManagement {
     }
 
     public int getTotalApartments() {
-        return propertymanagementDAO.getApartmentList().size();
+        return propertymanagementDAO.getApartments().size();
     }
 
     public double getAverageTotalCost() {
-        List<Apartment> apartments = propertymanagementDAO.getApartmentList();
+        List<Apartment> apartments = propertymanagementDAO.getApartments();
         if (apartments.isEmpty()) {
             return 0.0;
         }
@@ -38,7 +38,7 @@ public class PropertyManagement {
     }
 
     public List<Apartment> getOldestApartments() {
-        List<Apartment> apartments = propertymanagementDAO.getApartmentList();
+        List<Apartment> apartments = propertymanagementDAO.getApartments();
 
         if (apartments.isEmpty()) {
             return List.of();  // Пустой список, если нет квартир
@@ -56,3 +56,4 @@ public class PropertyManagement {
                 .collect(Collectors.toList());
     }
 }
+
