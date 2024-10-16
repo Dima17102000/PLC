@@ -61,11 +61,11 @@ public class PropertyManagementClient {
                                 return;  // Exit early if id is not a valid digit
                            }
                            
-                           int id = Integer.parseInt(args[3]);
-                           double area = Double.parseDouble(args[4]);
+                             int id = Integer.parseInt(args[3]);
+                             double area = Double.parseDouble(args[4]);
                   		     int rooms = Integer.parseInt(args[5]);
                   		     int floor = Integer.parseInt(args[6]);
-                           int year = Integer.parseInt(args[7]);
+                             int year = Integer.parseInt(args[7]);
 
                          // Check if the year is valid
                          if (year > Year.now().getValue()) {
@@ -205,4 +205,3 @@ public class PropertyManagementClient {
          return combinedArgs.toArray(new String[0]);
      }
 }
-

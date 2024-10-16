@@ -12,10 +12,6 @@ public class OwnedApartment extends Apartment {
 
     @Override
     public double getTotalCost() {
-        /*
-        double surcharge = getFloor() * 0.02 * getArea();  // 2% surcharge per floor
-        return (operatingCostsPerSquareMeter + reserveFundPerSquareMeter) * getArea() + surcharge;
-        */
         double floorSurcharge = (getFloor() > 0) ? getFloor() * 0.02 : 0;  // 2% surcharge per floor above 0
         return getArea() * (operatingCostsPerSquareMeter + reserveFundPerSquareMeter) * (1 + floorSurcharge);
     }

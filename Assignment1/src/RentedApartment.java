@@ -37,7 +37,4 @@ public class RentedApartment extends Apartment {
     }
 }
 
-/*
-public class RentedApartment {
-}
-*/
+
