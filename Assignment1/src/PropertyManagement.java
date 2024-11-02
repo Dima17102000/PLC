@@ -55,6 +55,29 @@ public class PropertyManagement {
                 .filter(apartment -> apartment.getYearOfConstruction() == oldestYear)
                 .collect(Collectors.toList());
     }
+    
+    public List<Apartment> getApartmentsByPriceRange(int min, int max) {
+        List<Apartment> apartments = propertymanagementDAO.getApartments();
+
+        if (apartments.isEmpty()) {
+            return List.of();  // Пустой список, если нет квартир
+        }
+      
+            return apartments.stream()
+                .filter(apartment -> apartment.getTotalCost() >= min && apartment.getTotalCost() <= max)
+                .collect(Collectors.toList());
+   }
+   
+   
+   public List<Apartment> getApartmentsPriceRange(int min,int max){
+        List<Apartment> apartments = propertymanagementDAO.getApartments();
+        if (apartments.isEmpty()) {
+            return List.of();  // Пустой список, если нет квартир
+        }
+        return apartments.stream()
+                .filter(apartment -> apartment.getTotalCost() >= min && apartment.getTotalCost() <= max)
+                .collect(Collectors.toList());
+   }
 }
 
 

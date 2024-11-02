@@ -47,14 +47,21 @@ public class PropertyManagementClient {
                     try 
                     {
                            String type = args[2];
-                           if (!type.equals("OA") && args.length != 14) {
+                           if (type.equals("OA") && args.length != 14) {
                                 System.out.println("Error: Invalid parameter.");
                                 return;
                            }
-                           if (!type.equals("RA") && args.length != 14) {
+                           
+                           else if (type.equals("RA") && args.length != 14) {
                                 System.out.println("Error: Invalid parameter.");
                                 return;
                            }
+                           
+                           else if (type.equals("GA") && args.length != 15) {
+                                System.out.println("Error: Invalid parameter.");
+                                return;
+                           }
+                           
                            // Check if the id is a valid digit
                            if (!args[3].matches("\\d+")) {
                                 System.out.println("Error: Invalid parameter.");
@@ -70,6 +77,7 @@ public class PropertyManagementClient {
                          // Check if the year is valid
                          if (year > Year.now().getValue()) {
                            System.out.println("Error: Invalid year of construction.");
+                           return;
                          } 
 
                            String postalCode = args[8];
@@ -106,7 +114,15 @@ public class PropertyManagementClient {
                            System.out.println("Info: Apartment " + id + " added.");
 
                         } 
-                        
+                        else if(type.equals("GA"))
+                        {
+                          double giftedr = Double.parseDouble(args[12]);
+                          int    giftedt = Integer.parseInt(args[13]);
+                          int    giftedrev = Integer.parseInt(args[14]);
+                          GiftedApartment gifted = new GiftedApartment(id, area, rooms, floor, year, postalCode, street, houseNumber, apartmentNumber, giftedr,giftedt,giftedrev);
+                           management.addApartment(gifted);
+                           System.out.println("Info: Apartment " + id + " added.");
+                        }
                         else 
                         {
                                  System.out.println("Error: Invalid parameter.");
@@ -147,7 +163,8 @@ public class PropertyManagementClient {
                         String counttype = args[2];
                         long count = management.getAllApartments().stream()
                             .filter(apartment -> (counttype.equals("OA") && apartment instanceof OwnedApartment) ||
-                                                 (counttype.equals("RA") && apartment instanceof RentedApartment))
+                                                 (counttype.equals("RA") && apartment instanceof RentedApartment)||
+                                                 (counttype.equals("GA") && apartment instanceof GiftedApartment))
                             .count();
                         System.out.println(count);
                     } else {
@@ -175,7 +192,28 @@ public class PropertyManagementClient {
                         }
                     }
                     break;
-
+                    
+								case "pricerange":
+                    
+                    int min = Integer.parseInt(args[2]);
+                    int max = Integer.parseInt(args[3]);
+                    
+                    List<Apartment> apartments = management.getApartmentsPriceRange(min,max);
+                    
+                    if(apartments.isEmpty())
+                    {
+                       System.out.println("No apartments found.");
+                    }
+                    
+                    else
+                    {
+                        for(Apartment ap: apartments)
+                        {
+                            System.out.println(ap);
+                        }
+                    }
+                    break;
+                    
                 default:
                     System.out.println("Error: Invalid parameter.");
             }
@@ -201,7 +239,6 @@ public class PropertyManagementClient {
                  combinedArgs.add(arg);
              }
          }
-
          return combinedArgs.toArray(new String[0]);
      }
 }
