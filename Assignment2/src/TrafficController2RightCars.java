@@ -1,61 +1,60 @@
 public class TrafficController2RightCars implements TrafficController {
     private TrafficRegistrar registrar;
-    private int countLeft = 0;  // Vehicles from the left
-    private int countRight = 0; // Vehicles from the right
-    private final int MAX_LEFT = 1;
-    private final int MAX_RIGHT = 2;
+    private int countLeft = 0;  // Счётчик машин слева
+    private int countRight = 0; // Счётчик машин справа
+    private final int MAX_LEFT = 1;   // Максимум одна машина слева
+    private final int MAX_RIGHT = 2;  // Максимум две машины справа
 
     public TrafficController2RightCars(TrafficRegistrar registrar) {
         this.registrar = registrar;
     }
 
     public synchronized void enterLeft(Vehicle vehicle) {
-        // Wait if there are cars on the right side or if the left side is already occupied
-        while (countRight > 0 || countLeft >= MAX_LEFT) {
+        // Машина слева ждёт, если на мосту уже находится максимальное количество машин слева
+        while (countLeft >= MAX_LEFT) {
             try {
                 wait();
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
         }
-        countLeft++;
+        countLeft++; // Разрешаем въезд машине слева
         registrar.registerLeft(vehicle);
+        System.out.println("Vehicle from left entered. Left count: " + countLeft);
     }
 
     public synchronized void enterRight(Vehicle vehicle) {
-        // Wait if there are cars on the left side or if the right side is full
-        while (countLeft > 0 || countRight >= MAX_RIGHT) {
+        // Машина справа ждёт, если на мосту уже находится максимальное количество машин справа
+        while (countRight >= MAX_RIGHT) {
             try {
                 wait();
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
         }
-        countRight++;
+        countRight++; // Разрешаем въезд машине справа
         registrar.registerRight(vehicle);
+        System.out.println("Vehicle from right entered. Right count: " + countRight);
     }
 
     public synchronized void leaveLeft(Vehicle vehicle) {
-        // When a left vehicle leaves, decrease count and notify all waiting vehicles
+        // Машина покидает мост слева
         if (countLeft > 0) {
             countLeft--;
             registrar.deregisterLeft(vehicle);
-            notifyAll();
+            System.out.println("Vehicle from left left. Left count: " + countLeft);
+            notifyAll(); // Уведомляем ожидающие машины слева
         }
     }
 
     public synchronized void leaveRight(Vehicle vehicle) {
-        // When a right vehicle leaves, decrease count and notify all waiting vehicles
+        // Машина покидает мост справа
         if (countRight > 0) {
             countRight--;
             registrar.deregisterRight(vehicle);
-            notifyAll();
+            System.out.println("Vehicle from right left. Right count: " + countRight);
+            notifyAll(); // Уведомляем ожидающие машины справа
         }
-    }
-
-    public synchronized boolean isFree() {
-        // Returns true if no vehicles are on the bridge
-        return countLeft == 0 && countRight == 0;
     }
 }
 
