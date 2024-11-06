@@ -20,7 +20,7 @@ public class TrafficController2RightCars implements TrafficController {
         }
         countLeft++; // Разрешаем въезд машине слева
         registrar.registerLeft(vehicle);
-        System.out.println("Vehicle from left entered. Left count: " + countLeft);
+        //System.out.println("Vehicle from left entered. Left count: " + countLeft);
     }
 
     public synchronized void enterRight(Vehicle vehicle) {
@@ -34,7 +34,7 @@ public class TrafficController2RightCars implements TrafficController {
         }
         countRight++; // Разрешаем въезд машине справа
         registrar.registerRight(vehicle);
-        System.out.println("Vehicle from right entered. Right count: " + countRight);
+        //System.out.println("Vehicle from right entered. Right count: " + countRight);
     }
 
     public synchronized void leaveLeft(Vehicle vehicle) {
@@ -42,7 +42,7 @@ public class TrafficController2RightCars implements TrafficController {
         if (countLeft > 0) {
             countLeft--;
             registrar.deregisterLeft(vehicle);
-            System.out.println("Vehicle from left left. Left count: " + countLeft);
+            //System.out.println("Vehicle from left left. Left count: " + countLeft);
             notifyAll(); // Уведомляем ожидающие машины слева
         }
     }
@@ -52,7 +52,7 @@ public class TrafficController2RightCars implements TrafficController {
         if (countRight > 0) {
             countRight--;
             registrar.deregisterRight(vehicle);
-            System.out.println("Vehicle from right left. Right count: " + countRight);
+            //System.out.println("Vehicle from right left. Right count: " + countRight);
             notifyAll(); // Уведомляем ожидающие машины справа
         }
     }

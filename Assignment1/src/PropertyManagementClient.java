@@ -47,7 +47,14 @@ public class PropertyManagementClient {
                     try 
                     {
                            String type = args[2];
-                           if (type.equals("OA") && args.length != 14) {
+                           if(!type.equals("OA") && !type.equals("RA") && !type.equals("GA"))
+                           {
+                               System.out.println("Error: Invalid parameter.");
+                               return;
+                              
+                           }
+                           
+                           else if (type.equals("OA") && args.length != 14) {
                                 System.out.println("Error: Invalid parameter.");
                                 return;
                            }
@@ -70,8 +77,8 @@ public class PropertyManagementClient {
                            
                              int id = Integer.parseInt(args[3]);
                              double area = Double.parseDouble(args[4]);
-                  		     int rooms = Integer.parseInt(args[5]);
-                  		     int floor = Integer.parseInt(args[6]);
+                  		       int rooms = Integer.parseInt(args[5]);
+                  		       int floor = Integer.parseInt(args[6]);
                              int year = Integer.parseInt(args[7]);
 
                          // Check if the year is valid
