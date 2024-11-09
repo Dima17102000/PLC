@@ -68,6 +68,8 @@ public class PropertyManagement {
                 .filter(apartment -> apartment.getTotalCost() >= min && apartment.getTotalCost() <= max)
                 .collect(Collectors.toList());
    }
+   
+   
 }
 
 
