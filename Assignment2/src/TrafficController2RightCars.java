@@ -4,6 +4,7 @@ public class TrafficController2RightCars implements TrafficController {
     private int countRight = 0; // Счётчик машин справа
     private final int MAX_LEFT = 1;   // Максимум одна машина слева
     private final int MAX_RIGHT = 2;  // Максимум две машины справа
+    
 
     public TrafficController2RightCars(TrafficRegistrar registrar) {
         this.registrar = registrar;
@@ -11,7 +12,7 @@ public class TrafficController2RightCars implements TrafficController {
 
     public synchronized void enterLeft(Vehicle vehicle) {
         // Машина слева ждёт, если на мосту уже находится максимальное количество машин слева
-        while (countLeft >= MAX_LEFT) {
+        while (countLeft >= MAX_LEFT || countRight > 0) {
             try {
                 wait();
             } catch (InterruptedException e) {
@@ -25,7 +26,7 @@ public class TrafficController2RightCars implements TrafficController {
 
     public synchronized void enterRight(Vehicle vehicle) {
         // Машина справа ждёт, если на мосту уже находится максимальное количество машин справа
-        while (countRight >= MAX_RIGHT) {
+        while (countRight >= MAX_RIGHT || countLeft > 0) {
             try {
                 wait();
             } catch (InterruptedException e) {
@@ -39,8 +40,8 @@ public class TrafficController2RightCars implements TrafficController {
 
     public synchronized void leaveLeft(Vehicle vehicle) {
         // Машина покидает мост слева
-        if (countLeft > 0) {
-            countLeft--;
+        if (countRight > 0) {
+            countRight--;
             registrar.deregisterLeft(vehicle);
             //System.out.println("Vehicle from left left. Left count: " + countLeft);
             notifyAll(); // Уведомляем ожидающие машины слева
@@ -49,8 +50,8 @@ public class TrafficController2RightCars implements TrafficController {
 
     public synchronized void leaveRight(Vehicle vehicle) {
         // Машина покидает мост справа
-        if (countRight > 0) {
-            countRight--;
+        if (countLeft > 0) {
+            countLeft--;
             registrar.deregisterRight(vehicle);
             //System.out.println("Vehicle from right left. Right count: " + countRight);
             notifyAll(); // Уведомляем ожидающие машины справа
